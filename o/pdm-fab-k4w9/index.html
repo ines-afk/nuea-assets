@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDM Fab x Nuea : Onboarding</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --brume:#FAFBFC; --voile:#F1F3F6; --cendre:#E4E8EE; --halo:#DDE4EC;
+  --ardoise:#C3CAD4; --halo-soft:#9AA6B3; --halo-mute:#7E8B99;
+  --trace:#666F7C; --ombre:#4E5661; --nocturne-clair:#1B2129;
+  --nuit:#14181D; --nocturne:#0E1116;
+  --line:rgba(20,24,29,.10); --line-strong:rgba(20,24,29,.18);
+  --error:#B4433A;
+  --r-card:8px; --r-block:20px; --r-pill:100px;
+  --sans:'PP Neue Montreal', ui-sans-serif, -apple-system, 'Helvetica Neue', 'Segoe UI', system-ui, sans-serif;
+  --meta:'PP Telegraf', ui-sans-serif, -apple-system, 'Helvetica Neue', 'Segoe UI', system-ui, sans-serif;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--brume);color:var(--nuit);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.055;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* Header */
+.header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,251,252,.92);backdrop-filter:blur(20px)}
+.header-inner{max-width:660px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:center;position:relative}
+.wordmark{font-family:var(--meta);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ombre);font-weight:500}
+.step-indicator{position:absolute;right:24px;font-family:var(--meta);font-size:12px;color:var(--halo-mute);letter-spacing:.04em}
+.progress-bar{position:fixed;top:60px;left:0;right:0;height:1px;background:var(--halo);z-index:100}
+.progress-fill{height:100%;background:var(--ombre);width:0;transition:width .6s var(--ease)}
+
+.container{max-width:660px;margin:0 auto;padding:110px 24px 80px}
+
+/* Intro */
+.intro{display:flex;flex-direction:column;justify-content:center;min-height:calc(100vh - 190px)}
+.eyebrow{font-family:var(--meta);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--halo-mute);margin-bottom:22px}
+.intro h1{font-size:clamp(30px,6vw,44px);line-height:1.1;letter-spacing:-.02em;font-weight:500;margin-bottom:26px}
+.intro h1 .x{color:var(--ardoise);font-weight:400}
+.intro p{font-size:16px;color:var(--ombre);margin-bottom:16px;max-width:52ch}
+.intro-cta{margin-top:36px}
+
+/* Steps */
+.step{display:none;animation:rise .5s var(--ease)}
+.step.active{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.step-head{margin-bottom:40px;padding-bottom:26px;border-bottom:1px solid var(--line)}
+.step-num{font-family:var(--meta);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--halo-mute);margin-bottom:12px}
+.step-head h2{font-size:28px;font-weight:500;letter-spacing:-.015em;margin-bottom:12px}
+.step-head p{font-size:15px;color:var(--trace);max-width:54ch}
+
+/* Fields */
+.field{margin-bottom:34px}
+.field label,.field .q{display:block;font-size:16px;font-weight:500;line-height:1.45;margin-bottom:6px;color:var(--nuit)}
+.req{color:var(--ardoise);font-weight:400}
+.hint{font-family:var(--meta);font-size:13px;color:var(--halo-mute);margin-bottom:12px;line-height:1.5}
+input[type=text],input[type=email],textarea,select{
+  width:100%;font-family:var(--sans);font-size:15px;color:var(--nuit);
+  background:#fff;border:1px solid var(--halo);border-radius:var(--r-card);
+  padding:13px 15px;transition:border-color .25s var(--ease),box-shadow .25s var(--ease);resize:vertical}
+textarea{min-height:104px;line-height:1.6}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--halo-mute);box-shadow:0 0 0 3px rgba(126,139,153,.10)}
+input::placeholder,textarea::placeholder{color:var(--ardoise)}
+select{appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237E8B99' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 15px center}
+
+/* Choices */
+.choices{display:flex;flex-wrap:wrap;gap:9px;margin-top:4px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0;width:0;height:0}
+.choice span{display:inline-block;padding:9px 16px;border:1px solid var(--halo);border-radius:var(--r-pill);
+  font-size:14px;color:var(--trace);cursor:pointer;background:#fff;transition:all .22s var(--ease);user-select:none}
+.choice span:hover{border-color:var(--ardoise);color:var(--ombre)}
+.choice input:checked+span{background:var(--nuit);border-color:var(--nuit);color:var(--brume)}
+.choice input:focus-visible+span{box-shadow:0 0 0 3px rgba(126,139,153,.18)}
+
+.reveal{display:none;margin-top:14px;padding-left:14px;border-left:1px solid var(--halo)}
+.reveal.on{display:block;animation:rise .35s var(--ease)}
+
+.error{display:none;font-family:var(--meta);font-size:13px;color:var(--error);margin-top:7px}
+.field.invalid .error{display:block}
+.field.invalid input,.field.invalid textarea,.field.invalid select{border-color:var(--error)}
+
+/* Callout */
+.callout{background:var(--voile);border:1px solid var(--line);border-radius:var(--r-block);padding:20px 22px;margin-bottom:36px}
+.callout p{font-family:var(--meta);font-size:14px;color:var(--trace);line-height:1.6}
+.callout strong{color:var(--ombre);font-weight:500}
+
+/* Nav */
+.nav{display:flex;gap:12px;align-items:center;margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.btn{font-family:var(--sans);font-size:15px;font-weight:500;padding:13px 30px;border-radius:var(--r-pill);
+  border:1px solid transparent;cursor:pointer;transition:all .25s var(--ease)}
+.btn-primary{background:var(--nuit);color:var(--brume)}
+.btn-primary:hover{background:var(--nocturne);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:default;transform:none}
+.btn-ghost{background:transparent;color:var(--halo-mute);border-color:var(--halo)}
+.btn-ghost:hover{color:var(--ombre);border-color:var(--ardoise)}
+.btn-lg{padding:16px 40px;font-size:16px}
+
+/* Done */
+.done{display:none;text-align:left;min-height:calc(100vh - 190px);flex-direction:column;justify-content:center}
+.done.active{display:flex;animation:rise .6s var(--ease)}
+.done h2{font-size:clamp(28px,5vw,38px);font-weight:500;letter-spacing:-.02em;margin-bottom:20px}
+.done p{font-size:16px;color:var(--ombre);max-width:52ch;margin-bottom:14px}
+
+@media(max-width:640px){
+  .container{padding:96px 20px 60px}
+  .step-head h2{font-size:23px}
+  .nav{flex-direction:column-reverse;align-items:stretch}
+  .btn{width:100%}
+  .step-indicator{right:20px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <span class="wordmark">PDM Fab <span style="color:var(--ardoise)">&times;</span> Nuea</span>
+    <span class="step-indicator" id="stepIndicator"></span>
+  </div>
+</header>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<main class="container">
+
+  <!-- INTRO -->
+  <section class="intro" id="intro">
+    <div class="eyebrow">Réactivation de la base client</div>
+    <h1>Avant qu'on<br>commence.</h1>
+    <p>Ce questionnaire nous sert à comprendre votre base client, votre façon de vendre et ce qui s'est passé ces deux dernières années. C'est sur ces réponses qu'on construira la stratégie de réactivation.</p>
+    <p>Répondez simplement, avec vos mots. Une réponse courte et vraie vaut mieux qu'une réponse longue et lisse. Si vous ne savez pas, écrivez-le, c'est une information en soi.</p>
+    <div class="intro-cta"><button class="btn btn-primary btn-lg" id="startBtn">Commencer</button></div>
+  </section>
+
+  <form id="form" action="https://formspree.io/f/REMPLACER_ENDPOINT" method="POST" style="display:none">
+  <input type="hidden" name="_subject" value="Onboarding PDM Fab">
+
+  <!-- BLOC 1 -->
+  <section class="step" data-step="1">
+    <div class="step-head">
+      <div class="step-num">Bloc 1 sur 6</div>
+      <h2>Votre activité</h2>
+      <p>On part de ce que vous vendez vraiment, pas de la version plaquette.</p>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q1">Qui remplit ce questionnaire ?</label>
+      <div class="hint">Nom et fonction. Si plusieurs personnes répondent, indiquez-le.</div>
+      <input type="text" id="q1" name="Qui repond" placeholder="Nom, fonction">
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q2">En une phrase, qu'est-ce que PDM Fab vend, et à qui ?</label>
+      <textarea id="q2" name="Ce que PDM vend"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q3">Quelles sont vos trois gammes ou familles de produits les plus vendues ?</label>
+      <div class="hint">Dans l'ordre, si possible.</div>
+      <textarea id="q3" name="Gammes les plus vendues"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q4">Sur quels produits aimeriez-vous développer les ventes en priorité, et pourquoi ?</label>
+      <div class="hint">Marge, capacité de production, stock, stratégie. Dites la vraie raison.</div>
+      <textarea id="q4" name="Produits a developper"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q5">Qu'est-ce qui fait qu'un client vous choisit plutôt qu'un gros groupe ?</label>
+      <textarea id="q5" name="Differenciation"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="nav"><button type="button" class="btn btn-primary" data-next>Suivant</button></div>
+  </section>
+
+  <!-- BLOC 2 -->
+  <section class="step" data-step="2">
+    <div class="step-head">
+      <div class="step-num">Bloc 2 sur 6</div>
+      <h2>Vos clients</h2>
+      <p>C'est le bloc le plus important. Il détermine à qui on écrit en premier et avec quel angle.</p>
+    </div>
+
+    <div class="field">
+      <span class="q">Quels sont vos principaux marchés aujourd'hui ?</span>
+      <div class="hint">Plusieurs choix possibles.</div>
+      <div class="choices">
+        <label class="choice"><input type="checkbox" name="Marches" value="Chantiers navals"><span>Chantiers navals</span></label>
+        <label class="choice"><input type="checkbox" name="Marches" value="Sanitaire"><span>Sanitaire</span></label>
+        <label class="choice"><input type="checkbox" name="Marches" value="Piscines"><span>Piscines</span></label>
+        <label class="choice"><input type="checkbox" name="Marches" value="Carrosseries isothermes"><span>Carrosseries isothermes</span></label>
+        <label class="choice"><input type="checkbox" name="Marches" value="Mouleurs industriels"><span>Mouleurs industriels</span></label>
+        <label class="choice"><input type="checkbox" name="Marches" value="Distribution et revente"><span>Distribution, revente</span></label>
+        <label class="choice"><input type="checkbox" name="Marches" value="Autre" data-reveal="marchesAutre"><span>Autre</span></label>
+      </div>
+      <div class="reveal" id="marchesAutre">
+        <label for="q6b">Lesquels ?</label>
+        <input type="text" id="q6b" name="Marches - autres precisions" placeholder="Précisez le ou les marchés">
+      </div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q7">À quoi ressemble un bon client pour vous ?</label>
+      <div class="hint">Taille, volume de commande, fréquence, marché.</div>
+      <textarea id="q7" name="Profil du bon client"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q8">Depuis la reprise de 2025, quels clients se sont le plus éloignés, et pourquoi selon vous ?</label>
+      <div class="hint">Si certains sont partis chez un concurrent identifié, dites-le. Même une intuition nous est utile.</div>
+      <textarea id="q8" name="Clients eloignes depuis la reprise"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q9">Quand un client arrête de commander, c'est généralement pour quelle raison ?</label>
+      <div class="hint">Prix, délai, qualité, changement d'interlocuteur, son propre marché qui ralentit.</div>
+      <textarea id="q9" name="Raisons d arret"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q10">Qui sont vos trois concurrents principaux ?</label>
+      <div class="hint">Noms, et ce qu'ils font mieux que vous selon vous.</div>
+      <textarea id="q10" name="Concurrents"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field">
+      <label for="q11">Un client qui revient après une longue absence, ça arrive ? Qu'est-ce qui l'a fait revenir ?</label>
+      <textarea id="q11" name="Clients revenus"></textarea>
+    </div>
+
+    <div class="field" data-required>
+      <label for="b1">Qu'est-ce qui a changé ou s'est amélioré chez vous depuis la reprise de 2025 ?</label>
+      <div class="hint">Nouveaux produits, gamme reformulée, délais, stock, capacité de production, équipe. C'est la raison concrète pour laquelle un client parti accepterait de revenir.</div>
+      <textarea id="b1" name="Ce qui a change depuis la reprise"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field">
+      <label for="b2">Y a-t-il une saisonnalité dans vos ventes ?</label>
+      <div class="hint">Par marché si elle varie. Les piscines et les chantiers navals n'ont pas les mêmes cycles. Cela détermine dans quel ordre on relance.</div>
+      <textarea id="b2" name="Saisonnalite"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="b4">Quelle est la taille d'une commande typique ?</label>
+      <div class="hint">Un ordre de grandeur suffit. Cela nous sert à mesurer ce que rapporte un client réactivé.</div>
+      <input type="text" id="b4" name="Taille de commande typique" placeholder="Montant approximatif, ou fourchette">
+    </div>
+
+    <div class="nav"><button type="button" class="btn btn-ghost" data-prev>Retour</button><button type="button" class="btn btn-primary" data-next>Suivant</button></div>
+  </section>
+
+  <!-- BLOC 3 -->
+  <section class="step" data-step="3">
+    <div class="step-head">
+      <div class="step-num">Bloc 3 sur 6</div>
+      <h2>Votre base et votre ERP</h2>
+      <p>Le bloc technique. Il peut être rempli par la personne qui gère LXP au quotidien.</p>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q12">Qui gère LXP au quotidien et peut sortir des exports ?</label>
+      <div class="hint">Nom, fonction, email. C'est la personne avec qui nous échangerons sur les données.</div>
+      <input type="text" id="q12" name="Referent LXP" placeholder="Nom, fonction, email">
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field">
+      <span class="q">Que pouvez-vous exporter de LXP ?</span>
+      <div class="hint">Cochez tout ce qui est possible. Si vous n'êtes pas sûr, cochez la dernière case.</div>
+      <div class="choices">
+        <label class="choice"><input type="checkbox" name="Exports possibles" value="Liste clients avec emails"><span>Liste clients avec emails</span></label>
+        <label class="choice"><input type="checkbox" name="Exports possibles" value="Historique de commandes par client"><span>Historique de commandes par client</span></label>
+        <label class="choice"><input type="checkbox" name="Exports possibles" value="Montants par commande"><span>Montants par commande</span></label>
+        <label class="choice"><input type="checkbox" name="Exports possibles" value="Familles de produits achetes"><span>Familles de produits achetés</span></label>
+        <label class="choice"><input type="checkbox" name="Exports possibles" value="Date de derniere commande"><span>Date de dernière commande</span></label>
+        <label class="choice"><input type="checkbox" name="Exports possibles" value="Plusieurs contacts par societe"><span>Plusieurs contacts par société</span></label>
+        <label class="choice"><input type="checkbox" name="Exports possibles" value="A verifier avec l editeur"><span>À vérifier avec l'éditeur</span></label>
+      </div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="a1">L'export peut-il inclure les contacts qui n'ont jamais passé commande ?</label>
+      <div class="hint">Une partie de votre base sont des prospects jamais convertis. S'ils n'apparaissent pas dans l'export, ils sortent purement et simplement du périmètre.</div>
+      <select id="a1" name="Export inclut les non-commandeurs">
+        <option value="">Choisissez</option>
+        <option>Oui</option>
+        <option>Non, uniquement ceux qui ont commandé</option>
+        <option>Je ne sais pas</option>
+      </select>
+      <div class="error">Merci de choisir une réponse.</div>
+    </div>
+
+    <div class="field">
+      <label for="q14">Sous quel format sortent les exports ?</label>
+      <select id="q14" name="Format des exports">
+        <option value="">Choisissez</option>
+        <option>Excel</option>
+        <option>CSV</option>
+        <option>PDF uniquement</option>
+        <option>Je ne sais pas</option>
+      </select>
+    </div>
+
+    <div class="field" data-required>
+      <label for="a3">Les devis restés sans suite sont-ils enregistrés dans LXP ?</label>
+      <div class="hint">Un client qui a demandé un prix sans commander derrière est l'un des meilleurs profils à relancer. Si la donnée existe, on la traite en priorité.</div>
+      <select id="a3" name="Devis sans suite traces">
+        <option value="">Choisissez</option>
+        <option>Oui, avec la date et le montant</option>
+        <option>Oui, mais sans le détail</option>
+        <option>Non</option>
+        <option>Je ne sais pas</option>
+      </select>
+      <div class="error">Merci de choisir une réponse.</div>
+    </div>
+
+    <div class="field">
+      <label for="a4">LXP contient-il des notes ou un historique d'échanges par client ?</label>
+      <div class="hint">Commentaires des commerciaux, comptes rendus d'appel, motifs de perte. Même incomplet, c'est ce qui explique pourquoi un client s'est arrêté.</div>
+      <select id="a4" name="Notes et historique dans LXP">
+        <option value="">Choisissez</option>
+        <option>Oui, régulièrement renseigné</option>
+        <option>Oui, mais peu rempli</option>
+        <option>Non</option>
+        <option>Je ne sais pas</option>
+      </select>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q15">Vos fiches contiennent-elles des emails nominatifs, ou plutôt des adresses génériques ?</label>
+      <div class="hint">Par exemple prenom.nom@societe.fr contre contact@societe.fr. Donnez une proportion approximative si vous l'avez.</div>
+      <textarea id="q15" name="Emails nominatifs ou generiques"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field">
+      <label for="a5">Quand votre interlocuteur change chez un client, que devient la fiche ?</label>
+      <div class="hint">C'est ce qui détermine le volume de doublons et de contacts périmés qu'on va trouver.</div>
+      <select id="a5" name="Traitement du changement d interlocuteur">
+        <option value="">Choisissez</option>
+        <option>La fiche existante est mise à jour</option>
+        <option>Un nouveau contact est ajouté à la même société</option>
+        <option>Une nouvelle fiche société est créée</option>
+        <option>Ça dépend des cas</option>
+        <option>Je ne sais pas</option>
+      </select>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q16">La base a été importée fin 2023. Est-elle mise à jour quand un contact change ?</label>
+      <select id="q16" name="Mise a jour de la base">
+        <option value="">Choisissez</option>
+        <option>Oui, systématiquement</option>
+        <option>De temps en temps</option>
+        <option>Non, quasiment jamais</option>
+        <option>Je ne sais pas</option>
+      </select>
+      <div class="error">Merci de choisir une réponse.</div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="a6">Votre base contient-elle des contacts hors France ?</label>
+      <div class="hint">Cela détermine la langue dans laquelle les messages seront écrits.</div>
+      <select id="a6" name="Contacts hors France" data-reveal-select="revPays" data-reveal-when="quelques|significatif">
+        <option value="">Choisissez</option>
+        <option value="france-uniquement">Non, uniquement la France</option>
+        <option value="quelques">Oui, quelques-uns</option>
+        <option value="significatif">Oui, une part significative</option>
+        <option value="inconnu">Je ne sais pas</option>
+      </select>
+      <div class="reveal" id="revPays">
+        <label for="a6b">Quels pays ?</label>
+        <input type="text" id="a6b" name="Pays hors France" placeholder="Belgique, Espagne, Italie...">
+      </div>
+      <div class="error">Merci de choisir une réponse.</div>
+    </div>
+
+    <div class="field">
+      <label for="q17">Y a-t-il des clients ou des sociétés à ne surtout pas contacter ?</label>
+      <div class="hint">Litige en cours, relation sensible, compte suivi personnellement par un dirigeant. Cette liste sera exclue de tous les envois.</div>
+      <textarea id="q17" name="A ne pas contacter"></textarea>
+    </div>
+
+    <div class="nav"><button type="button" class="btn btn-ghost" data-prev>Retour</button><button type="button" class="btn btn-primary" data-next>Suivant</button></div>
+  </section>
+
+  <!-- BLOC 4 -->
+  <section class="step" data-step="4">
+    <div class="step-head">
+      <div class="step-num">Bloc 4 sur 6</div>
+      <h2>Votre façon de vendre</h2>
+      <p>Une relance qui fonctionne crée une demande. Il faut savoir ce qui se passe ensuite, chez vous.</p>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q18">Qui sont vos deux commerciaux ?</label>
+      <div class="hint">Nom, email, et le marché ou le secteur que chacun couvre.</div>
+      <textarea id="q18" name="Commerciaux"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q19">Combien de nouvelles demandes peuvent-ils absorber par semaine, en plus de leur travail actuel ?</label>
+      <div class="hint">Soyez réaliste. On cadencera les envois là-dessus.</div>
+      <select id="q19" name="Capacite hebdomadaire">
+        <option value="">Choisissez</option>
+        <option>Moins de 5</option>
+        <option>5 à 10</option>
+        <option>10 à 20</option>
+        <option>Plus de 20</option>
+      </select>
+      <div class="error">Merci de choisir une réponse.</div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q20">Aujourd'hui, que se passe-t-il quand un client demande un prix ?</label>
+      <div class="hint">Qui fait le devis, à partir de quoi, en combien de temps.</div>
+      <textarea id="q20" name="Process de devis"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field">
+      <label for="q21">Quel délai s'écoule en moyenne entre une demande et une commande ?</label>
+      <select id="q21" name="Cycle de vente">
+        <option value="">Choisissez</option>
+        <option>Quelques jours</option>
+        <option>1 à 2 semaines</option>
+        <option>Environ un mois</option>
+        <option>Plusieurs mois</option>
+        <option>Très variable selon le produit</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="q22">Avez-vous déjà envoyé des emails à l'ensemble de vos clients ?</label>
+      <div class="hint">Newsletter, annonce de hausse tarifaire, information produit. Si oui, quand, et qu'est-ce que ça a donné ?</div>
+      <textarea id="q22" name="Historique emailing"></textarea>
+    </div>
+
+    <div class="nav"><button type="button" class="btn btn-ghost" data-prev>Retour</button><button type="button" class="btn btn-primary" data-next>Suivant</button></div>
+  </section>
+
+  <!-- BLOC 5 -->
+  <section class="step" data-step="5">
+    <div class="step-head">
+      <div class="step-num">Bloc 5 sur 6</div>
+      <h2>Messagerie et domaine</h2>
+      <p>Les envois partiront de vos adresses, pas des nôtres. On doit donc vérifier que votre messagerie est correctement configurée.</p>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q23">Quel est votre fournisseur de messagerie ?</label>
+      <select id="q23" name="Fournisseur messagerie">
+        <option value="">Choisissez</option>
+        <option>Microsoft 365 ou Outlook</option>
+        <option>Google Workspace ou Gmail</option>
+        <option>OVH</option>
+        <option>Autre hébergeur</option>
+        <option>Je ne sais pas</option>
+      </select>
+      <div class="error">Merci de choisir une réponse.</div>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q24">Qui gère votre site et le nom de domaine pdmfab.fr ?</label>
+      <div class="hint">Nom du prestataire et contact. Nous aurons besoin d'eux pour vérifier la configuration d'envoi.</div>
+      <input type="text" id="q24" name="Prestataire site et domaine" placeholder="Société, nom, email">
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field">
+      <label for="q25">Pouvez-vous obtenir l'accès à la configuration DNS du domaine ?</label>
+      <select id="q25" name="Acces DNS">
+        <option value="">Choisissez</option>
+        <option>Oui, nous l'avons</option>
+        <option>Oui, via notre prestataire</option>
+        <option>Non</option>
+        <option>Je ne sais pas ce que c'est</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="q26">Utilisez-vous déjà un outil d'emailing ou de newsletter ?</label>
+      <div class="hint">Mailchimp, Brevo, Sendinblue, autre. Si oui, lequel et qui y a accès.</div>
+      <textarea id="q26" name="Outil emailing existant"></textarea>
+    </div>
+
+    <div class="nav"><button type="button" class="btn btn-ghost" data-prev>Retour</button><button type="button" class="btn btn-primary" data-next>Suivant</button></div>
+  </section>
+
+  <!-- BLOC 6 -->
+  <section class="step" data-step="6">
+    <div class="step-head">
+      <div class="step-num">Bloc 6 sur 6</div>
+      <h2>Ce que vous attendez</h2>
+      <p>Dernier bloc. C'est celui qui nous servira à mesurer si la mission a servi à quelque chose.</p>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q27">Dans trois mois, qu'est-ce qui vous ferait dire que cette mission a été utile ?</label>
+      <div class="hint">Pas besoin de chiffre précis. Dites ce que vous aimeriez voir se passer.</div>
+      <textarea id="q27" name="Definition du succes"></textarea>
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field">
+      <label for="q28">Y a-t-il un sujet, un ton ou une information à éviter dans les messages ?</label>
+      <div class="hint">Par exemple la reprise de 2025, un changement tarifaire, une rupture de stock passée.</div>
+      <textarea id="q28" name="A eviter dans les messages"></textarea>
+    </div>
+
+    <div class="field" data-required>
+      <label for="q29">Qui valide les messages avant leur envoi ?</label>
+      <div class="hint">Une seule personne de préférence, pour ne pas ralentir les cycles de validation.</div>
+      <input type="text" id="q29" name="Valideur des messages" placeholder="Nom">
+      <div class="error">Merci de renseigner ce champ.</div>
+    </div>
+
+    <div class="field">
+      <label for="q30">Quelque chose qu'on ne vous a pas demandé et qu'on devrait savoir ?</label>
+      <textarea id="q30" name="Autre chose"></textarea>
+    </div>
+
+    <div class="nav">
+      <button type="button" class="btn btn-ghost" data-prev>Retour</button>
+      <button type="submit" class="btn btn-primary" id="submitBtn">Envoyer mes réponses</button>
+    </div>
+  </section>
+  </form>
+
+  <!-- DONE -->
+  <section class="done" id="done">
+    <div class="eyebrow">Bien reçu</div>
+    <h2>Merci.</h2>
+    <p>Vos réponses nous sont parvenues. Nous les analysons avec l'export de votre base, et nous revenons vers vous avec un ordre du jour pour le call de lancement.</p>
+    <p>Si un point vous revient entre-temps, écrivez directement à ines@nuea-agency.com.</p>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var intro=document.getElementById('intro'),form=document.getElementById('form'),done=document.getElementById('done');
+  var steps=Array.prototype.slice.call(document.querySelectorAll('.step'));
+  var fill=document.getElementById('progressFill'),ind=document.getElementById('stepIndicator');
+  var cur=0;
+
+  function render(){
+    steps.forEach(function(s,i){s.classList.toggle('active',i===cur)});
+    fill.style.width=((cur+1)/steps.length*100)+'%';
+    ind.textContent=(cur+1)+' / '+steps.length;
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function validate(step){
+    var ok=true;
+    step.querySelectorAll('.field[data-required]').forEach(function(f){
+      var c=f.querySelector('input[type=text],textarea,select');
+      if(c&&!c.value.trim()){f.classList.add('invalid');ok=false}
+      else{f.classList.remove('invalid')}
+    });
+    if(!ok){
+      var first=step.querySelector('.field.invalid');
+      if(first)first.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    return ok;
+  }
+
+  // Champs reveles par une case, un bouton radio ou un select
+  function syncReveals(){
+    document.querySelectorAll('[data-reveal]').forEach(function(ctl){
+      var zone=document.getElementById(ctl.getAttribute('data-reveal'));
+      if(zone)setZone(zone,ctl.checked);
+    });
+    document.querySelectorAll('[data-reveal-select]').forEach(function(sel){
+      var zone=document.getElementById(sel.getAttribute('data-reveal-select'));
+      if(!zone)return;
+      var when=(sel.getAttribute('data-reveal-when')||'').split('|');
+      setZone(zone,when.indexOf(sel.value)!==-1);
+    });
+  }
+  function setZone(zone,on){
+    if(zone.classList.contains('on')===on)return;
+    zone.classList.toggle('on',on);
+    if(!on)zone.querySelectorAll('input,textarea,select').forEach(function(f){f.value=''});
+  }
+  document.addEventListener('change',syncReveals);
+  syncReveals();
+
+  document.getElementById('startBtn').addEventListener('click',function(){
+    intro.style.display='none';form.style.display='block';render();
+  });
+
+  document.addEventListener('click',function(e){
+    if(e.target.hasAttribute&&e.target.hasAttribute('data-next')){
+      if(validate(steps[cur])&&cur<steps.length-1){cur++;render()}
+    }
+    if(e.target.hasAttribute&&e.target.hasAttribute('data-prev')){
+      if(cur>0){cur--;render()}
+    }
+  });
+
+  document.addEventListener('input',function(e){
+    var f=e.target.closest&&e.target.closest('.field.invalid');
+    if(f&&e.target.value.trim())f.classList.remove('invalid');
+  });
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!validate(steps[cur]))return;
+    if(form.action.indexOf('REMPLACER_ENDPOINT')!==-1){
+      alert("Ce formulaire n'est pas encore actif. Merci de patienter, nous vous renvoyons le lien très bientôt.");
+      return;
+    }
+    var btn=document.getElementById('submitBtn');
+    btn.disabled=true;btn.textContent='Envoi en cours';
+    fetch(form.action,{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}})
+      .then(function(r){
+        if(r.ok){form.style.display='none';done.classList.add('active');
+          fill.style.width='100%';ind.textContent='';window.scrollTo({top:0,behavior:'smooth'})}
+        else{throw new Error('reject')}
+      })
+      .catch(function(){
+        btn.disabled=false;btn.textContent='Envoyer mes réponses';
+        alert("L'envoi n'a pas abouti. Réessayez, ou envoyez vos réponses à ines@nuea-agency.com.");
+      });
+  });
+})();
+</script>
+</body>
+</html>
